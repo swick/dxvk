@@ -95,6 +95,10 @@ namespace dxvk {
     InitReturnPtr(ppSurface);
     
     std::lock_guard<std::recursive_mutex> lock(m_mutex);
+#ifdef BUILD_LINUX_ELF
+    // FIXME
+    return S_OK;
+#else
     
     if (!IsWindow(m_desc.OutputWindow))
       return DXGI_ERROR_INVALID_CALL;
@@ -105,6 +109,7 @@ namespace dxvk {
     }
     
     return m_backBuffer->QueryInterface(riid, ppSurface);
+#endif
   }
   
   
@@ -112,7 +117,11 @@ namespace dxvk {
     InitReturnPtr(ppOutput);
     
     std::lock_guard<std::recursive_mutex> lock(m_mutex);
-    
+#ifdef BUILD_LINUX_ELF
+    // FIXME
+    return 0;
+#else
+
     if (!IsWindow(m_desc.OutputWindow))
       return DXGI_ERROR_INVALID_CALL;
     
@@ -125,6 +134,7 @@ namespace dxvk {
       MONITOR_DEFAULTTOPRIMARY);
     
     return m_adapter->GetOutputFromMonitor(monitor, ppOutput);
+#endif
   }
   
   
@@ -155,6 +165,10 @@ namespace dxvk {
           IDXGIOutput** ppTarget) {
     std::lock_guard<std::recursive_mutex> lock(m_mutex);
     
+#ifdef BUILD_LINUX_ELF
+    // FIXME
+    return S_OK;
+#else
     if (!IsWindow(m_desc.OutputWindow))
       return DXGI_ERROR_INVALID_CALL;
     
@@ -171,6 +185,7 @@ namespace dxvk {
     }
     
     return hr;
+#endif
   }
   
   
@@ -187,6 +202,10 @@ namespace dxvk {
   
   HRESULT STDMETHODCALLTYPE DxgiSwapChain::Present(UINT SyncInterval, UINT Flags) {
     std::lock_guard<std::recursive_mutex> lock(m_mutex);
+#ifdef BUILD_LINUX_ELF
+    // FIXME
+    return S_OK;
+#else
     
     if (!IsWindow(m_desc.OutputWindow))
       return DXGI_ERROR_INVALID_CALL;
@@ -229,6 +248,7 @@ namespace dxvk {
       Logger::err(err.message());
       return DXGI_ERROR_DRIVER_INTERNAL_ERROR;
     }
+#endif
   }
   
   
@@ -240,6 +260,10 @@ namespace dxvk {
           UINT        SwapChainFlags) {
     std::lock_guard<std::recursive_mutex> lock(m_mutex);
     
+#ifdef BUILD_LINUX_ELF
+    // FIXME
+    return S_OK;
+#else
     if (!IsWindow(m_desc.OutputWindow))
       return DXGI_ERROR_INVALID_CALL;
     
@@ -257,12 +281,16 @@ namespace dxvk {
       m_desc.BufferDesc.Format = NewFormat;
     
     return CreateBackBuffer();
+#endif
   }
   
   
   HRESULT STDMETHODCALLTYPE DxgiSwapChain::ResizeTarget(const DXGI_MODE_DESC* pNewTargetParameters) {
     std::lock_guard<std::recursive_mutex> lock(m_mutex);
-    
+
+#ifdef BUILD_LINUX_ELF
+    // FIXME
+#else    
     if (pNewTargetParameters == nullptr)
       return DXGI_ERROR_INVALID_CALL;
     
@@ -282,6 +310,7 @@ namespace dxvk {
     ::OffsetRect(&newRect, oldRect.left, oldRect.top);    
     ::MoveWindow(m_desc.OutputWindow, newRect.left, newRect.top,
         newRect.right - newRect.left, newRect.bottom - newRect.top, TRUE);
+#endif
     
     return S_OK;
   }
@@ -292,6 +321,9 @@ namespace dxvk {
           IDXGIOutput*  pTarget) {
     std::lock_guard<std::recursive_mutex> lock(m_mutex);
     
+#ifdef BUILD_LINUX_ELF
+    // FIXME
+#else
     if (!IsWindow(m_desc.OutputWindow))
       return DXGI_ERROR_INVALID_CALL;
     
@@ -302,6 +334,7 @@ namespace dxvk {
       return this->EnterFullscreenMode(pTarget);
     else if (!m_desc.Windowed && !Fullscreen)
       return this->LeaveFullscreenMode();
+#endif
     
     return S_OK;
   }
@@ -382,6 +415,10 @@ namespace dxvk {
   
   
   VkExtent2D DxgiSwapChain::GetWindowSize() const {
+#ifdef BUILD_LINUX_ELF
+    // FIXME
+    return VkExtent2D{};
+#else
     RECT windowRect;
     
     if (!::GetClientRect(m_desc.OutputWindow, &windowRect))
@@ -391,6 +428,7 @@ namespace dxvk {
     result.width  = windowRect.right;
     result.height = windowRect.bottom;
     return result;
+#endif
   }
   
   
@@ -403,6 +441,9 @@ namespace dxvk {
         return E_FAIL;
       }
     }
+#ifdef BUILD_LINUX_ELF
+    // FIXME
+#else
     
     // Update swap chain description
     m_desc.Windowed = FALSE;
@@ -434,11 +475,16 @@ namespace dxvk {
       SWP_FRAMECHANGED | SWP_SHOWWINDOW | SWP_NOACTIVATE);
     
     m_monitor = desc.Monitor;
+#endif
     return S_OK;
   }
   
   
   HRESULT DxgiSwapChain::LeaveFullscreenMode() {
+#ifdef BUILD_LINUX_ELF
+    // FIXME
+    return S_OK;
+#else
     m_desc.Windowed = TRUE;
     m_monitor = nullptr;
     
@@ -455,6 +501,7 @@ namespace dxvk {
       SWP_FRAMECHANGED | SWP_NOZORDER | SWP_NOACTIVATE);
     
     return SetDefaultGammaControl();
+#endif
   }
   
   

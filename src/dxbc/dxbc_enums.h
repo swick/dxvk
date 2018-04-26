@@ -1,6 +1,8 @@
 #pragma once
 
 #include "dxbc_include.h"
+#undef None
+#undef Bool
 
 namespace dxvk {
   

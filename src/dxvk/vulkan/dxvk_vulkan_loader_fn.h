@@ -1,6 +1,12 @@
 #pragma once
 
-#define VK_USE_PLATFORM_WIN32_KHR 1
+#ifdef BUILD_LINUX_ELF
+  #define VK_USE_PLATFORM_WAYLAND_KHR 1
+  #define VK_USE_PLATFORM_XCB_KHR 1
+  #define VK_USE_PLATFORM_XLIB_KHR 1
+#else
+  #define VK_USE_PLATFORM_WIN32_KHR 1
+#endif
 #include <vulkan/vulkan.h>
 
 #define VULKAN_FN(name) \

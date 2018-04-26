@@ -13,11 +13,15 @@ namespace dxvk {
   : m_device  (device),
     m_context (device->createContext()) {
     
+#ifdef BUILD_LINUX_ELF
+    // FIXME
+#else
     // Create Vulkan surface for the window
     HINSTANCE instance = reinterpret_cast<HINSTANCE>(
       GetWindowLongPtr(window, GWLP_HINSTANCE));
     
     m_surface = m_device->adapter()->createSurface(instance, window);
+#endif
     
     // Reset options for the swap chain itself. We will
     // create a swap chain object before presentation.

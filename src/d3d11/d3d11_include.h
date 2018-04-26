@@ -2,6 +2,7 @@
 
 #include "../dxgi/dxgi_include.h"
 
+#ifndef BUILD_LINUX_ELF
 #include <d3d11_1.h>
 
 // This is not defined in the mingw headers
@@ -19,6 +20,7 @@
 
 #define D3D11_DXVK_USE_REMAINING_LAYERS 0xFFFFFFFF
 #define D3D11_DXVK_USE_REMAINING_LEVELS 0xFFFFFFFF
+
 
 // Most of these were copied from d3d11.h
 // For some strange reason, we cannot use the structures
@@ -91,3 +93,5 @@ typedef struct D3D11_FEATURE_DATA_D3D9_SHADOW_SUPPORT {
 } D3D11_FEATURE_DATA_D3D9_SHADOW_SUPPORT;
 #endif // __WINE__
 #endif // _MSC_VER
+#endif // BUILD_LINUX_ELF
+

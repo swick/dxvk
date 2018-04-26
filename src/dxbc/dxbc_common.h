@@ -1,6 +1,8 @@
 #pragma once
 
 #include "dxbc_include.h"
+#undef major
+#undef minor
 
 namespace dxvk {
   

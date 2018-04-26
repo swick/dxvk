@@ -4,6 +4,25 @@
 
 namespace dxvk::env {
 
+#ifdef BUILD_LINUX_ELF
+
+  std::string getEnvVar(const wchar_t* name) {
+    //FIXME
+    return std::string();
+  }
+  
+  std::string getExeName() {
+    //FIXME
+    return std::string();
+  }
+  
+  std::string getTempDirectory() {
+    //FIXME
+    return std::string();
+  }
+
+#else
+
   std::string getEnvVar(const wchar_t* name) {
     DWORD len = ::GetEnvironmentVariableW(name, nullptr, 0);
     
@@ -50,5 +69,7 @@ namespace dxvk::env {
     
     return str::fromws(dxvkTempDir);
   }
+
+#endif
   
 }

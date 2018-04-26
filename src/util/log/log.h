@@ -5,6 +5,7 @@
 #include <iostream>
 #include <mutex>
 #include <string>
+#undef None
 
 namespace dxvk {
   

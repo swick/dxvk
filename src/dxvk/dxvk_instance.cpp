@@ -90,7 +90,13 @@ namespace dxvk {
     std::vector<const char*> extOptional = { };
     std::vector<const char*> extRequired = {
       VK_KHR_SURFACE_EXTENSION_NAME,
+#ifdef BUILD_LINUX_ELF
+      VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME,
+      VK_KHR_XCB_SURFACE_EXTENSION_NAME,
+      VK_KHR_XLIB_SURFACE_EXTENSION_NAME,
+#else
       VK_KHR_WIN32_SURFACE_EXTENSION_NAME,
+#endif
     };
     
     const vk::NameSet extensionsAvailable

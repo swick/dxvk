@@ -4,7 +4,9 @@
 #ifdef _MSC_VER
   #define DLLEXPORT
 #else
-  #define DLLEXPORT __declspec(dllexport)
+  #ifndef BUILD_LINUX_ELF
+    #define DLLEXPORT __declspec(dllexport)
+  #endif
 #endif
 
 #include "../util/com/com_guid.h"
@@ -23,7 +25,11 @@
 #include "../util/util_math.h"
 #include "../util/util_string.h"
 
+#ifndef BUILD_LINUX_ELF
 #include <dxgi1_2.h>
+#else
+#include <win/main.h>
+#endif
 
 // For some reason, these are not exposed
 #ifndef DXGI_RESOURCE_PRIORITY_NORMAL

@@ -1,5 +1,11 @@
 project('dxvk', ['c', 'cpp'])
 
+build_linux_elf = true
+
+if build_linux_elf
+  add_global_arguments('-DBUILD_LINUX_ELF', language : 'cpp')
+endif
+
 cpu_family = target_machine.cpu_family()
 
 dxvk_compiler = meson.get_compiler('cpp')
@@ -22,11 +28,15 @@ else
   dxvk_library_path = meson.source_root() + '/lib32'
 endif
 
-lib_vulkan  = dxvk_compiler.find_library('vulkan-1', dirs : dxvk_library_path)
-lib_d3d11   = dxvk_compiler.find_library('d3d11')
-lib_dxgi    = dxvk_compiler.find_library('dxgi')
+if build_linux_elf
+  lib_vulkan  = dxvk_compiler.find_library('vulkan', dirs : dxvk_library_path)
+else
+  lib_vulkan  = dxvk_compiler.find_library('vulkan-1', dirs : dxvk_library_path)
+  lib_d3d11   = dxvk_compiler.find_library('d3d11')
+  lib_dxgi    = dxvk_compiler.find_library('dxgi')
+endif
 
-if dxvk_compiler.get_id() != 'msvc'
+if dxvk_compiler.get_id() != 'msvc' and not build_linux_elf
   lib_d3dcompiler_47 = dxvk_compiler.find_library('d3dcompiler_47')
 endif
 

@@ -70,9 +70,13 @@ namespace dxvk {
       return DXGI_ERROR_NOT_FOUND;
     }
     
+#ifdef BUILD_LINUX_ELF
+    // FIXME
+#else
     // TODO support multiple monitors
     HMONITOR monitor = ::MonitorFromPoint({ 0, 0 }, MONITOR_DEFAULTTOPRIMARY);
     *ppOutput = ref(new DxgiOutput(this, monitor));
+#endif
     return S_OK;
   }
   

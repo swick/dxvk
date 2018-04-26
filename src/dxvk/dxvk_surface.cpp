@@ -102,6 +102,10 @@ namespace dxvk {
   
   
   VkSurfaceKHR DxvkSurface::createSurface(HINSTANCE instance, HWND window) {
+#ifdef BUILD_LINUX_ELF
+    // FIXME
+    VkSurfaceKHR surface = VK_NULL_HANDLE;
+#else
     VkWin32SurfaceCreateInfoKHR info;
     info.sType      = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
     info.pNext      = nullptr;
@@ -112,6 +116,7 @@ namespace dxvk {
     VkSurfaceKHR surface = VK_NULL_HANDLE;
     if (m_vki->vkCreateWin32SurfaceKHR(m_vki->instance(), &info, nullptr, &surface) != VK_SUCCESS)
       throw DxvkError("DxvkSurface::createSurface: Failed to create win32 surface");
+#endif
     
     VkBool32 supportStatus = VK_FALSE;
     

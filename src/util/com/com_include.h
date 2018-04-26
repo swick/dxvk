@@ -6,9 +6,13 @@
 #pragma GCC diagnostic ignored "-Wnon-virtual-dtor"
 #endif // __GNUC__
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include <unknwn.h>
+#ifdef BUILD_LINUX_ELF
+  #include <win/main.h>
+#else
+  #define WIN32_LEAN_AND_MEAN
+  #include <windows.h>
+  #include <unknwn.h>
+#endif
 
 // GCC: -std options disable certain keywords
 // https://gcc.gnu.org/onlinedocs/gcc/Alternate-Keywords.html

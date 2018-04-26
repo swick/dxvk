@@ -75,10 +75,12 @@ dxvk_src = files([
 ])
 
 thread_dep = dependency('threads')
+# FIXME
+t2 = dxvk_compiler.find_library('pthread')
 
 dxvk_lib = static_library('dxvk', dxvk_src, glsl_generator.process(dxvk_shaders),
   link_with           : [ util_lib, spirv_lib ],
-  dependencies        : [ thread_dep, lib_vulkan ],
+  dependencies        : [ thread_dep, lib_vulkan, t2 ],
   include_directories : [ dxvk_include_path ],
   override_options    : ['cpp_std='+dxvk_cpp_std])
 

@@ -142,7 +142,10 @@ namespace dxvk {
   HRESULT STDMETHODCALLTYPE DxgiOutput::GetDesc(DXGI_OUTPUT_DESC *pDesc) {
     if (pDesc == nullptr)
       return DXGI_ERROR_INVALID_CALL;
-    
+
+#ifdef BUILD_LINUX_ELF
+//FIXME
+#else
     ::MONITORINFOEXW monInfo;
     monInfo.cbSize = sizeof(monInfo);
 
@@ -157,6 +160,7 @@ namespace dxvk {
     pDesc->AttachedToDesktop  = 1;
     pDesc->Rotation           = DXGI_MODE_ROTATION_UNSPECIFIED;
     pDesc->Monitor            = m_monitor;
+#endif
     return S_OK;
   }
   
@@ -169,6 +173,9 @@ namespace dxvk {
     if (pNumModes == nullptr)
       return DXGI_ERROR_INVALID_CALL;
     
+#ifdef BUILD_LINUX_ELF
+//FIXME
+#else
     // Query monitor info to get the device name
     ::MONITORINFOEXW monInfo;
     monInfo.cbSize = sizeof(monInfo);
@@ -235,6 +242,7 @@ namespace dxvk {
     }
     
     *pNumModes = dstModeId;
+#endif
     return S_OK;
   }
   
